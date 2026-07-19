@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#101820">
+<title>دفتر ۴×۱ | گزارش عملکرد و تارگت ماهانه</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#101820; --bg-soft:#161f28; --card:#1b2530; --card-2:#212c38;
+    --border:rgba(241,237,228,.09); --border-strong:rgba(241,237,228,.16);
+    --text:#f1ede4; --text-dim:#98a3ab; --text-faint:#5f6a72;
+    --gold:#d4a537; --gold-soft:rgba(212,165,55,.14);
+    --teal:#3e8e7e; --teal-soft:rgba(62,142,126,.14);
+    --coral:#e2725b; --radius:16px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Vazirmatn',sans-serif;min-height:100vh;padding-bottom:60px;-webkit-tap-highlight-color:transparent;}
+  .designer-tag{position:fixed;top:10px;left:10px;font-size:11px;color:var(--text-faint);letter-spacing:.3px;z-index:50;background:rgba(16,24,32,.7);padding:4px 9px;border-radius:20px;border:1px solid var(--border);backdrop-filter:blur(4px);}
+  .wrap{max-width:720px;margin:0 auto;padding:52px 16px 24px;}
+
+  #nameGate{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:100;padding:24px;}
+  .gate-box{max-width:360px;width:100%;text-align:center;}
+  .gate-box .mark{width:64px;height:64px;border-radius:50%;background:var(--gold-soft);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-weight:800;color:var(--gold);font-size:20px;}
+  .gate-box h1{font-size:22px;margin:0 0 6px;font-weight:800;}
+  .gate-box p{color:var(--text-dim);font-size:13.5px;margin:0 0 22px;line-height:1.9;}
+  .gate-box input{width:100%;padding:14px 16px;border-radius:12px;border:1px solid var(--border-strong);background:var(--card);color:var(--text);font-family:inherit;font-size:15px;margin-bottom:12px;outline:none;}
+  .gate-box input:focus{border-color:var(--gold);}
+  .btn{width:100%;padding:14px;border-radius:12px;border:none;background:var(--gold);color:#1b1204;font-weight:700;font-size:15px;font-family:inherit;cursor:pointer;}
+  .btn:disabled{opacity:.4;}
+
+  .hello{font-size:14px;color:var(--text-dim);margin-bottom:4px;}
+  .hello b{color:var(--text);}
+  .app-title{font-size:26px;font-weight:800;letter-spacing:.2px;margin-bottom:14px;}
+  .app-title span{color:var(--gold);}
+
+  .app-switch{display:flex;gap:6px;margin-bottom:18px;background:var(--bg-soft);padding:5px;border-radius:14px;border:1px solid var(--border-strong);}
+  .app-switch-btn{flex:1;padding:12px 6px;border:none;background:transparent;color:var(--text-dim);font-family:inherit;font-size:13.5px;font-weight:700;border-radius:10px;cursor:pointer;}
+  .app-switch-btn.active{background:var(--gold);color:#1b1204;}
+
+  .app-page{display:none;}
+  .app-page.active{display:block;}
+
+  .date-card{background:linear-gradient(150deg,var(--card),var(--card-2));border:1px solid var(--border);border-radius:var(--radius);padding:18px 18px;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+  .date-card .wk{font-size:12.5px;color:var(--text-dim);margin-bottom:2px;}
+  .date-card .dt{font-size:19px;font-weight:700;}
+  .ring{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--gold);background:conic-gradient(var(--gold) calc(var(--pct,0)*1%), rgba(255,255,255,.06) 0);position:relative;flex-shrink:0;}
+  .ring::after{content:'';position:absolute;inset:4px;border-radius:50%;background:var(--card);}
+  .ring b{position:relative;z-index:1;}
+
+  .tabs{display:flex;gap:6px;margin-bottom:20px;background:var(--bg-soft);padding:5px;border-radius:14px;border:1px solid var(--border);}
+  .tab-btn{flex:1;padding:10px 6px;border:none;background:transparent;color:var(--text-dim);font-family:inherit;font-size:13px;font-weight:600;border-radius:10px;cursor:pointer;}
+  .tab-btn.active{background:var(--card-2);color:var(--gold);}
+  .section{display:none;}
+  .section.active{display:block;}
+
+  .col-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px;}
+  @media(max-width:520px){.col-grid{grid-template-columns:1fr;}}
+  .col-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 14px 16px;transition:border-color .2s,background .2s;}
+  .col-card.on{border-color:var(--gold);background:var(--card-2);}
+  .col-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+  .col-head .eyebrow{font-size:11px;color:var(--text-faint);letter-spacing:.5px;}
+  .col-head .name{font-size:15.5px;font-weight:700;margin-top:1px;}
+  .chk{width:24px;height:24px;border-radius:7px;border:1.5px solid var(--border-strong);background:transparent;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:transparent;font-size:14px;}
+  .chk.checked{background:var(--gold);border-color:var(--gold);color:#1b1204;}
+  .field-label{font-size:11.5px;color:var(--text-dim);margin:10px 0 5px;display:block;}
+  .col-card input[type=number],.col-card input[type=text],.col-card textarea,.tcard input,.tcard textarea{
+    width:100%;background:var(--bg-soft);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:inherit;font-size:13.5px;padding:9px 10px;outline:none;resize:vertical;}
+  .col-card input:disabled,.col-card textarea:disabled{opacity:.35;cursor:not-allowed;}
+  .col-card input:focus,.col-card textarea:focus,.tcard input:focus,.tcard textarea:focus{border-color:var(--gold);}
+  .col-card textarea{min-height:52px;}
+
+  .block{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:14px;}
+  .block-title{font-size:14.5px;font-weight:700;margin-bottom:10px;}
+  .block textarea{width:100%;background:var(--bg-soft);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:inherit;font-size:14px;padding:11px;min-height:64px;outline:none;resize:vertical;}
+  .block textarea:focus{border-color:var(--gold);}
+
+  .rate-row{display:flex;gap:8px;justify-content:space-between;margin:8px 0 4px;}
+  .rate-btn{flex:1;aspect-ratio:1;border-radius:12px;border:1.5px solid var(--border-strong);background:var(--bg-soft);color:var(--text-dim);font-family:inherit;font-weight:700;font-size:16px;cursor:pointer;}
+  .rate-btn.sel{background:var(--gold);border-color:var(--gold);color:#1b1204;}
+  .rate-hint{display:flex;justify-content:space-between;font-size:11px;color:var(--text-faint);margin-bottom:14px;}
+
+  .save-bar{display:flex;align-items:center;gap:8px;justify-content:center;font-size:12.5px;color:var(--text-faint);margin:16px 0 4px;}
+  .save-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);}
+
+  .hist-item{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:13px 15px;margin-bottom:10px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;}
+  .hist-item .l .d{font-weight:700;font-size:14.5px;}
+  .hist-item .l .m{font-size:12px;color:var(--text-dim);margin-top:2px;}
+  .hist-item .r{font-size:12px;color:var(--gold);font-weight:700;text-align:left;white-space:nowrap;}
+  .edit-tag{display:inline-block;margin-top:4px;font-size:10.5px;color:var(--teal);background:var(--teal-soft);padding:2px 7px;border-radius:20px;}
+  .empty{text-align:center;color:var(--text-faint);font-size:13.5px;padding:40px 10px;}
+
+  .detail-box{background:var(--card);border:1px solid var(--border-strong);border-radius:var(--radius);padding:16px;margin-bottom:14px;}
+  .detail-box h3{margin:0 0 10px;font-size:15px;}
+  .detail-col{border-top:1px dashed var(--border);padding-top:10px;margin-top:10px;font-size:13px;}
+  .detail-col .dc-name{font-weight:700;color:var(--gold);margin-bottom:4px;font-size:13.5px;}
+  .detail-col div{color:var(--text-dim);margin-top:2px;}
+  .back-link{color:var(--text-dim);font-size:13px;margin-bottom:14px;display:inline-block;cursor:pointer;}
+  .edit-heading{font-size:13.5px;color:var(--teal);font-weight:700;margin-bottom:12px;}
+
+  .export-opt{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px;}
+  .export-opt .et{font-weight:700;font-size:14.5px;margin-bottom:4px;}
+  .export-opt .ed{font-size:12.5px;color:var(--text-dim);margin-bottom:12px;}
+  .export-opt select{width:100%;background:var(--bg-soft);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:inherit;font-size:13.5px;padding:9px 10px;margin-bottom:10px;}
+  #reportDateSelect{width:100%;background:var(--bg-soft);border:1px solid var(--border-strong);border-radius:9px;color:var(--text);font-family:inherit;font-size:14px;padding:10px 10px;}
+  .btn-outline{width:100%;padding:12px;border-radius:11px;border:1.5px solid var(--gold);background:transparent;color:var(--gold);font-weight:700;font-size:14px;font-family:inherit;cursor:pointer;}
+
+  /* target module */
+  .target-month-tag{font-size:12.5px;color:var(--gold);font-weight:700;margin-bottom:16px;}
+  .target-locked-note{font-size:12.5px;color:var(--text-faint);background:var(--bg-soft);border:1px solid var(--border);border-radius:11px;padding:10px 12px;margin-bottom:16px;}
+  .tcard{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:14px;}
+  .tcard h4{margin:0 0 12px;font-size:14.5px;font-weight:700;}
+  .tcard h4 span{color:var(--gold);}
+  .tgrid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media(max-width:480px){.tgrid2{grid-template-columns:1fr;}}
+  .tfield{margin-bottom:0;}
+  .tfield label{font-size:11.5px;color:var(--text-dim);margin-bottom:5px;display:block;}
+
+  #printArea{display:none;}
+  @media print{
+    @page{ size:A4 portrait; margin:10mm; }
+    html,body.printing{margin:0 !important;padding:0 !important;width:210mm;}
+    body.printing > *:not(#printArea){display:none !important;}
+    body.printing{background:#fff;}
+    #printArea{display:block !important;direction:rtl;font-family:'Vazirmatn',sans-serif;color:#111;padding:0;width:100%;}
+    #printArea h1{font-size:19px;margin:0 0 2px;}
+    #printArea .sub{font-size:11.5px;color:#555;margin-bottom:12px;}
+    #printArea table{width:100%;border-collapse:collapse;margin-bottom:12px;font-size:12px;page-break-inside:auto;}
+    #printArea tr{page-break-inside:avoid;}
+    #printArea th,#printArea td{border:1px solid #999;padding:6px 8px;text-align:center;vertical-align:middle;}
+    #printArea th{background:#eee;}
+    #printArea td.ltext, #printArea th.ltext{text-align:right;}
+    #printArea.compact table{font-size:9.5px;}
+    #printArea.compact th,#printArea.compact td{padding:3px 5px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="designer-tag">طراح: محمد سیستانی</div>
+
+<div id="nameGate">
+  <div class="gate-box">
+    <div class="mark">۴×۱</div>
+    <h1>خوش اومدی</h1>
+    <p>برای شروع، اسمت رو وارد کن. دفعات بعد که برنامه رو باز می‌کنی، دیگه لازم نیست اسمت رو بنویسی.</p>
+    <input id="nameInput" type="text" placeholder="اسم شما...">
+    <button class="btn" id="nameSubmit" disabled>شروع کن</button>
+  </div>
+</div>
+
+<div class="wrap" id="mainWrap" style="display:none;">
+
+  <div class="hello">سلام <b id="helloName"></b> 👋</div>
+  <div class="app-title">دفتر <span>۴×۱</span></div>
+
+  <div class="app-switch">
+    <button class="app-switch-btn active" data-app="daily">دفتر ۴×۱</button>
+    <button class="app-switch-btn" data-app="target">تارگت ماهانه</button>
+  </div>
+
+  <!-- ================= DAILY APP ================= -->
+  <div class="app-page active" id="app-daily">
+
+    <div class="date-card">
+      <div>
+        <div class="wk" id="todayWeekday"></div>
+        <div class="dt" id="todayDate"></div>
+      </div>
+      <div class="ring" id="progressRing" style="--pct:0"><b id="progressText">۰/۴</b></div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="today">گزارش امروز</button>
+      <button class="tab-btn" data-tab="history">تاریخچه</button>
+      <button class="tab-btn" data-tab="export">خروجی</button>
+    </div>
+
+    <div class="section active" id="tab-today">
+      <div class="block" style="padding:14px 16px;">
+        <div class="field-label" style="margin:0 0 8px;">ثبت گزارش برای کدام روز:</div>
+        <select id="reportDateSelect"></select>
+      </div>
+      <div id="todayFormMount"></div>
+    </div>
+
+    <div class="section" id="tab-history">
+      <div id="historyList"></div>
+      <div id="historyDetail" style="display:none;"></div>
+    </div>
+
+    <div class="section" id="tab-export">
+      <div class="export-opt">
+        <div class="et">خروجی روزانه</div>
+        <div class="ed">گزارش یک روز مشخص را به‌صورت جدول (PDF از طریق چاپ مرورگر) دریافت کنید.</div>
+        <select id="exportDaySelect"></select>
+        <button class="btn-outline" onclick="exportDaily()">دریافت خروجی روزانه</button>
+      </div>
+      <div class="export-opt">
+        <div class="et">خروجی هفتگی</div>
+        <div class="ed">جدول ۷ روز اخیر شامل تعداد اقدامات هر فعالیت و رضایت عملکرد، در یک صفحه A4.</div>
+        <button class="btn-outline" onclick="exportWeekly()">دریافت خروجی هفتگی</button>
+      </div>
+      <div class="export-opt">
+        <div class="et">خروجی ماهانه</div>
+        <div class="ed">جدول ماه شمسی جاری شامل تعداد اقدامات هر فعالیت و رضایت عملکرد.</div>
+        <button class="btn-outline" onclick="exportMonthly()">دریافت خروجی ماهانه</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================= TARGET APP ================= -->
+  <div class="app-page" id="app-target">
+    <div class="tabs">
+      <button class="tab-btn active" data-ttab="current">ماه جاری</button>
+      <button class="tab-btn" data-ttab="thistory">تاریخچه تارگت</button>
+    </div>
+
+    <div class="section active" id="ttab-current"></div>
+    <div class="section" id="ttab-thistory">
+      <div id="targetHistoryList"></div>
+      <div id="targetHistoryDetail" style="display:none;"></div>
+    </div>
+  </div>
+
+</div>
+
+<div id="printArea"></div>
+
+<script>
+/* ---------------- Jalali (Shamsi) conversion ---------------- */
+function div(a,b){ return Math.floor(a/b); }
+function toPersianDigits(str){
+  var d=['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+  return String(str).replace(/[0-9]/g, function(ch){ return d[ch]; });
+}
+function toJalali(gy, gm, gd){
+  var g_d_m = [0,31,59,90,120,151,181,212,243,273,304,334];
+  var jy = (gy <= 1600) ? 0 : 979;
+  gy -= (gy <= 1600) ? 621 : 1600;
+  var gy2 = (gm > 2) ? (gy + 1) : gy;
+  var days = (365*gy) + div(gy2+3,4) - div(gy2+99,100) + div(gy2+399,400) - 80 + gd + g_d_m[gm-1];
+  jy += 33 * div(days,12053);
+  days %= 12053;
+  jy += 4 * div(days,1461);
+  days %= 1461;
+  if (days > 365){ jy += div(days-1,365); days = (days-1) % 365; }
+  var jm, jd;
+  if (days < 186){ jm = 1 + div(days,31); jd = 1 + (days % 31); }
+  else { jm = 7 + div(days-186,30); jd = 1 + ((days-186) % 30); }
+  return [jy, jm, jd];
+}
+var JMONTHS = ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+var JWEEKDAYS = ['یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه'];
+
+function jalaliOf(dateObj){
+  var j = toJalali(dateObj.getFullYear(), dateObj.getMonth()+1, dateObj.getDate());
+  return {jy:j[0], jm:j[1], jd:j[2], weekday: JWEEKDAYS[dateObj.getDay()]};
+}
+function jKey(j){ return j.jy+'-'+j.jm+'-'+j.jd; }
+function jLabel(j){ return toPersianDigits(j.jd)+' '+JMONTHS[j.jm-1]+' '+toPersianDigits(j.jy); }
+function isoDate(d){ var m=('0'+(d.getMonth()+1)).slice(-2), day=('0'+d.getDate()).slice(-2); return d.getFullYear()+'-'+m+'-'+day; }
+
+/* ---------------- storage: daily ---------------- */
+var NAME_KEY = 'daftar4x1_name';
+var DATA_KEY = 'daftar4x1_data_v1';
+var COLS = [
+  {key:'davat', name:'دعوت', tag:'۱'},
+  {key:'moshavere', name:'مشاوره', tag:'۲'},
+  {key:'peygiri', name:'پیگیری', tag:'۳'},
+  {key:'roshd', name:'رشد شخصیتی', tag:'۴'}
+];
+
+function loadData(){ try{ var raw = localStorage.getItem(DATA_KEY); return raw ? JSON.parse(raw) : {entries:{}}; }catch(e){ return {entries:{}}; } }
+function saveData(data){ localStorage.setItem(DATA_KEY, JSON.stringify(data)); flashSaved(); }
+var saveFlashEls = [];
+function flashSaved(){
+  document.querySelectorAll('.save-status-el').forEach(function(st){
+    st.textContent = 'ذخیره شد ✓'; 
+    clearTimeout(st._t);
+    st._t = setTimeout(function(){ st.textContent='ذخیره خودکار فعال است'; }, 1400);
+  });
+}
+function emptyEntry(j, gdate){
+  var cols = {};
+  COLS.forEach(function(c){ cols[c.key] = {checked:false, count:'', result:'', desc:''}; });
+  return { jy:j.jy, jm:j.jm, jd:j.jd, weekday:j.weekday, gdate:gdate, cols:cols, bestAction:'', satisfaction:null, improve:'' };
+}
+function isEditableEntry(e){
+  if(!e.gdate) return false;
+  var entryDate = new Date(e.gdate+'T00:00:00');
+  var today0 = new Date(); today0.setHours(0,0,0,0);
+  var diffDays = Math.round((today0-entryDate)/86400000);
+  return diffDays >= 0 && diffDays <= 1;
+}
+
+var data = loadData();
+var now = new Date();
+var todayJ = jalaliOf(now);
+var todayKey = jKey(todayJ);
+if(!data.entries[todayKey]) data.entries[todayKey] = emptyEntry(todayJ, isoDate(now));
+var entry = data.entries[todayKey];
+
+var yesterdayDate = new Date(now); yesterdayDate.setDate(yesterdayDate.getDate()-1);
+var yesterdayJ = jalaliOf(yesterdayDate);
+var yesterdayKey = jKey(yesterdayJ);
+if(!data.entries[yesterdayKey]) data.entries[yesterdayKey] = emptyEntry(yesterdayJ, isoDate(yesterdayDate));
+var yesterdayEntry = data.entries[yesterdayKey];
+
+/* ---------------- storage: target ---------------- */
+var TARGET_KEY = 'daftar4x1_targets_v1';
+function loadTargets(){ try{ var raw = localStorage.getItem(TARGET_KEY); return raw ? JSON.parse(raw) : {targets:{}}; }catch(e){ return {targets:{}}; } }
+function saveTargets(t){ localStorage.setItem(TARGET_KEY, JSON.stringify(t)); flashSaved(); }
+function tKey(jy,jm){ return jy+'-'+jm; }
+function emptyTarget(jy,jm){
+  return {
+    jy:jy, jm:jm, subCount:'', positionTarget:'',
+    personalSalesTarget:'', teamSalesTarget:'', personalEntryTarget:'', teamEntryTarget:'',
+    weeks:[0,1,2,3].map(function(){ return {date:'', personalSales:'', teamSales:'', personalEntry:'', teamEntry:'', growthPlan:''}; })
+  };
+}
+var targetData = loadTargets();
+var curTKey = tKey(todayJ.jy, todayJ.jm);
+if(!targetData.targets[curTKey]) targetData.targets[curTKey] = emptyTarget(todayJ.jy, todayJ.jm);
+var curTarget = targetData.targets[curTKey];
+
+/* ================================================================
+   DAILY FORM (reusable: used for "today" and for editable "yesterday")
+   ================================================================ */
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]; }); }
+
+function renderDailyForm(entryRef, isTodayRing){
+  var container = document.createElement('div');
+
+  var grid = document.createElement('div');
+  grid.className = 'col-grid';
+  container.appendChild(grid);
+
+  function renderCols(){
+    grid.innerHTML = '';
+    COLS.forEach(function(c){
+      var st = entryRef.cols[c.key];
+      var card = document.createElement('div');
+      card.className = 'col-card' + (st.checked ? ' on' : '');
+      card.innerHTML =
+        '<div class="col-head">'+
+          '<div><div class="eyebrow">فعالیت '+c.tag+'</div><div class="name">'+c.name+'</div></div>'+
+          '<button type="button" class="chk'+(st.checked?' checked':'')+'" data-col="'+c.key+'">'+(st.checked?'✓':'')+'</button>'+
+        '</div>'+
+        '<label class="field-label">تعداد اقدام</label>'+
+        '<input type="number" min="0" inputmode="numeric" data-col="'+c.key+'" data-field="count" value="'+(st.count||'')+'" '+(st.checked?'':'disabled')+'>'+
+        '<label class="field-label">نتیجه</label>'+
+        '<input type="text" data-col="'+c.key+'" data-field="result" value="'+(st.result?escapeHtml(st.result):'')+'" '+(st.checked?'':'disabled')+'>'+
+        '<label class="field-label">توضیحات بیشتر</label>'+
+        '<textarea data-col="'+c.key+'" data-field="desc" '+(st.checked?'':'disabled')+'>'+(st.desc?escapeHtml(st.desc):'')+'</textarea>';
+      grid.appendChild(card);
+    });
+    grid.querySelectorAll('.chk').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var col = btn.getAttribute('data-col');
+        entryRef.cols[col].checked = !entryRef.cols[col].checked;
+        saveData(data); renderCols();
+        if(isTodayRing) updateProgress();
+      });
+    });
+    grid.querySelectorAll('input,textarea').forEach(function(el){
+      el.addEventListener('input', function(){
+        var col = el.getAttribute('data-col'), field = el.getAttribute('data-field');
+        entryRef.cols[col][field] = el.value;
+        saveData(data);
+      });
+    });
+  }
+  renderCols();
+
+  var bestBlock = document.createElement('div');
+  bestBlock.className = 'block';
+  bestBlock.innerHTML = '<div class="block-title">اقدام یا عملکرد عالی امروزم (بدون توجه به نتیجه):</div><textarea placeholder="چه کاری رو خوب انجام دادم..."></textarea>';
+  var bestTa = bestBlock.querySelector('textarea');
+  bestTa.value = entryRef.bestAction || '';
+  bestTa.addEventListener('input', function(){ entryRef.bestAction = bestTa.value; saveData(data); });
+  container.appendChild(bestBlock);
+
+  var rateBlock = document.createElement('div');
+  rateBlock.className = 'block';
+  rateBlock.innerHTML = '<div class="block-title">میزان رضایت از عملکرد امروزم:</div><div class="rate-row"></div><div class="rate-hint"><span>۱: کمترین</span><span>۵: بیشترین</span></div>';
+  var rateRow = rateBlock.querySelector('.rate-row');
+  function renderRating(){
+    rateRow.innerHTML = '';
+    for(var i=1;i<=5;i++){
+      (function(i){
+        var b = document.createElement('button');
+        b.type='button'; b.className = 'rate-btn'+(entryRef.satisfaction===i?' sel':'');
+        b.textContent = toPersianDigits(i);
+        b.addEventListener('click', function(){ entryRef.satisfaction = i; saveData(data); renderRating(); });
+        rateRow.appendChild(b);
+      })(i);
+    }
+  }
+  renderRating();
+  container.appendChild(rateBlock);
+
+  var improveBlock = document.createElement('div');
+  improveBlock.className = 'block';
+  improveBlock.innerHTML = '<div class="block-title">چه عواملی را باید در خودم تقویت کنم؟</div><textarea placeholder="نکاتی که باید روشون کار کنم..."></textarea>';
+  var impTa = improveBlock.querySelector('textarea');
+  impTa.value = entryRef.improve || '';
+  impTa.addEventListener('input', function(){ entryRef.improve = impTa.value; saveData(data); });
+  container.appendChild(improveBlock);
+
+  var saveBar = document.createElement('div');
+  saveBar.className = 'save-bar';
+  saveBar.innerHTML = '<span class="save-dot"></span><span class="save-status-el">ذخیره خودکار فعال است</span>';
+  container.appendChild(saveBar);
+
+  return container;
+}
+
+function updateProgress(){
+  var count = COLS.filter(function(c){ return entry.cols[c.key].checked; }).length;
+  var ring = document.getElementById('progressRing');
+  ring.style.setProperty('--pct', (count/4*100));
+  document.getElementById('progressText').textContent = toPersianDigits(count)+'/'+toPersianDigits(4);
+}
+
+/* ---------------- init ---------------- */
+function mountReportForm(which){
+  var mount = document.getElementById('todayFormMount');
+  mount.innerHTML = '';
+  var target = (which === 'yesterday') ? yesterdayEntry : entry;
+  mount.appendChild(renderDailyForm(target, which !== 'yesterday'));
+}
+function setupReportDateSelect(){
+  var sel = document.getElementById('reportDateSelect');
+  sel.innerHTML = '';
+  var optToday = document.createElement('option');
+  optToday.value = 'today';
+  optToday.textContent = 'امروز — ' + todayJ.weekday + ' ' + jLabel(todayJ);
+  sel.appendChild(optToday);
+  var optYesterday = document.createElement('option');
+  optYesterday.value = 'yesterday';
+  optYesterday.textContent = 'دیروز — ' + yesterdayJ.weekday + ' ' + jLabel(yesterdayJ) + ' (مهلت امروز تمام می‌شود)';
+  sel.appendChild(optYesterday);
+  sel.addEventListener('change', function(){ mountReportForm(sel.value); });
+  mountReportForm('today');
+}
+function init(){
+  document.getElementById('todayWeekday').textContent = todayJ.weekday;
+  document.getElementById('todayDate').textContent = jLabel(todayJ);
+  setupReportDateSelect();
+  updateProgress();
+  setupTabs();
+  setupAppSwitch();
+  renderHistoryList();
+  populateExportDaySelect();
+  renderTargetCurrent();
+  renderTargetHistoryList();
+}
+
+/* ---------------- tabs / app switch ---------------- */
+function setupAppSwitch(){
+  document.querySelectorAll('.app-switch-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.app-switch-btn').forEach(function(b){ b.classList.remove('active'); });
+      document.querySelectorAll('.app-page').forEach(function(s){ s.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('app-'+btn.getAttribute('data-app')).classList.add('active');
+    });
+  });
+}
+function setupTabs(){
+  document.querySelectorAll('#app-daily > .tabs .tab-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('#app-daily > .tabs .tab-btn').forEach(function(b){ b.classList.remove('active'); });
+      document.querySelectorAll('#app-daily > .section').forEach(function(s){ s.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('tab-'+btn.getAttribute('data-tab')).classList.add('active');
+      if(btn.getAttribute('data-tab')==='history'){
+        document.getElementById('historyDetail').style.display='none';
+        document.getElementById('historyList').style.display='block';
+      }
+    });
+  });
+  document.querySelectorAll('#app-target > .tabs .tab-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('#app-target > .tabs .tab-btn').forEach(function(b){ b.classList.remove('active'); });
+      document.querySelectorAll('#app-target > .section').forEach(function(s){ s.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('ttab-'+btn.getAttribute('data-ttab')).classList.add('active');
+      if(btn.getAttribute('data-ttab')==='thistory'){
+        document.getElementById('targetHistoryDetail').style.display='none';
+        document.getElementById('targetHistoryList').style.display='block';
+      }
+    });
+  });
+}
+
+/* ---------------- daily history ---------------- */
+function allEntriesSorted(excludeToday){
+  var keys = Object.keys(data.entries);
+  var list = keys.map(function(k){ return data.entries[k]; });
+  if(excludeToday) list = list.filter(function(e){ return jKey(e) !== todayKey; });
+  list.sort(function(a,b){ if(a.jy!==b.jy) return b.jy-a.jy; if(a.jm!==b.jm) return b.jm-a.jm; return b.jd-a.jd; });
+  return list;
+}
+
+function renderHistoryList(){
+  var wrap = document.getElementById('historyList');
+  var past = allEntriesSorted(true);
+  if(past.length===0){
+    wrap.innerHTML = '<div class="empty">هنوز گزارش قبلی ثبت نشده. از فردا، گزارش‌های امروز اینجا نمایش داده می‌شن.</div>';
+    return;
+  }
+  wrap.innerHTML = '';
+  past.forEach(function(e){
+    var count = COLS.filter(function(c){ return e.cols[c.key].checked; }).length;
+    var item = document.createElement('div');
+    item.className = 'hist-item';
+    item.innerHTML =
+      '<div class="l"><div class="d">'+jLabel(e)+'</div><div class="m">'+e.weekday+(e.satisfaction?' · رضایت '+toPersianDigits(e.satisfaction)+'/۵':'')+'</div></div>'+
+      '<div class="r">'+toPersianDigits(count)+'/۴</div>';
+    item.addEventListener('click', function(){ showHistoryDetail(e); });
+    wrap.appendChild(item);
+  });
+}
+
+function showHistoryDetail(e){
+  document.getElementById('historyList').style.display='none';
+  var det = document.getElementById('historyDetail');
+  det.style.display='block';
+  var html = '<div class="back-link" id="backToList">‹ بازگشت به لیست</div>';
+  html += '<div class="detail-box"><h3>'+e.weekday+' '+jLabel(e)+'</h3>';
+  COLS.forEach(function(c){
+    var st = e.cols[c.key];
+    html += '<div class="detail-col"><div class="dc-name">'+c.name+(st.checked?'':' (ثبت نشده)')+'</div>';
+    if(st.checked){
+      html += '<div>تعداد اقدام: '+toPersianDigits(st.count||'۰')+'</div>';
+      html += '<div>نتیجه: '+(st.result?escapeHtml(st.result):'—')+'</div>';
+      html += '<div>توضیحات: '+(st.desc?escapeHtml(st.desc):'—')+'</div>';
+    }
+    html += '</div>';
+  });
+  html += '<div class="detail-col"><div class="dc-name">اقدام عالی امروز</div><div>'+(e.bestAction?escapeHtml(e.bestAction):'—')+'</div></div>';
+  html += '<div class="detail-col"><div class="dc-name">رضایت از عملکرد</div><div>'+(e.satisfaction?toPersianDigits(e.satisfaction)+' از ۵':'—')+'</div></div>';
+  html += '<div class="detail-col"><div class="dc-name">عوامل قابل تقویت</div><div>'+(e.improve?escapeHtml(e.improve):'—')+'</div></div>';
+  html += '</div>';
+  det.innerHTML = html;
+  document.getElementById('backToList').addEventListener('click', function(){
+    det.style.display='none'; document.getElementById('historyList').style.display='block';
+  });
+}
+
+/* ---------------- export / print (daily) ---------------- */
+function populateExportDaySelect(){
+  var sel = document.getElementById('exportDaySelect');
+  var all = allEntriesSorted(false);
+  sel.innerHTML = '';
+  all.forEach(function(e){
+    var opt = document.createElement('option');
+    opt.value = jKey(e);
+    opt.textContent = e.weekday+' - '+jLabel(e) + (jKey(e)===todayKey ? ' (امروز)' : '');
+    sel.appendChild(opt);
+  });
+}
+function printNow(title, bodyHtml, compact){
+  var area = document.getElementById('printArea');
+  area.className = compact ? 'compact' : '';
+  area.innerHTML = '<h1>'+title+'</h1><div class="sub">دفتر ۴×۱ · طراح: محمد سیستانی</div>' + bodyHtml;
+  document.body.classList.add('printing');
+  window.print();
+  setTimeout(function(){ document.body.classList.remove('printing'); }, 500);
+}
+function buildDailyTable(e){
+  var html = '<div class="sub">'+e.weekday+' — '+jLabel(e)+'</div>';
+  html += '<table><tr><th>فعالیت</th><th>تعداد اقدام</th><th>نتیجه</th><th class="ltext">توضیحات بیشتر</th></tr>';
+  COLS.forEach(function(c){
+    var st = e.cols[c.key];
+    html += '<tr><td>'+c.name+'</td><td>'+(st.checked?toPersianDigits(st.count||0):'—')+'</td><td>'+(st.checked?(st.result||'—'):'—')+'</td><td class="ltext">'+(st.checked?(st.desc||'—'):'—')+'</td></tr>';
+  });
+  html += '</table>';
+  html += '<table><tr><th style="width:30%">اقدام عالی امروز</th><td class="ltext">'+(e.bestAction||'—')+'</td></tr>';
+  html += '<tr><th>رضایت از عملکرد</th><td>'+(e.satisfaction?toPersianDigits(e.satisfaction)+'/۵':'—')+'</td></tr>';
+  html += '<tr><th>عوامل قابل تقویت</th><td class="ltext">'+(e.improve||'—')+'</td></tr></table>';
+  return html;
+}
+function exportDaily(){
+  var key = document.getElementById('exportDaySelect').value;
+  var e = data.entries[key];
+  if(!e){ alert('گزارشی برای این روز یافت نشد.'); return; }
+  printNow('گزارش روزانه', buildDailyTable(e), false);
+}
+function buildPeriodTable(list){
+  var html = '<table><tr><th>تاریخ</th><th>روز هفته</th><th>دعوت</th><th>مشاوره</th><th>پیگیری</th><th>رشد شخصی</th><th>رضایت</th></tr>';
+  var totals = {davat:0,moshavere:0,peygiri:0,roshd:0}; var satSum=0, satN=0;
+  list.forEach(function(e){
+    var row = '<tr><td>'+jLabel(e)+'</td><td>'+e.weekday+'</td>';
+    COLS.forEach(function(c){
+      var st = e.cols[c.key];
+      var v = st.checked ? (parseInt(st.count)||0) : null;
+      row += '<td>'+(v===null?'—':toPersianDigits(v))+'</td>';
+      if(v!==null) totals[c.key]+=v;
+    });
+    row += '<td>'+(e.satisfaction?toPersianDigits(e.satisfaction)+'/۵':'—')+'</td></tr>';
+    if(e.satisfaction){ satSum+=e.satisfaction; satN++; }
+    html += row;
+  });
+  var avg = satN ? (satSum/satN).toFixed(1) : '—';
+  html += '<tr><th>جمع / میانگین</th><td>—</td><td>'+toPersianDigits(totals.davat)+'</td><td>'+toPersianDigits(totals.moshavere)+'</td><td>'+toPersianDigits(totals.peygiri)+'</td><td>'+toPersianDigits(totals.roshd)+'</td><td>'+toPersianDigits(avg)+'</td></tr>';
+  html += '</table>';
+  return html;
+}
+function exportWeekly(){
+  var days = [];
+  for(var i=6;i>=0;i--){
+    var d = new Date(); d.setDate(d.getDate()-i);
+    var j = jalaliOf(d); var k = jKey(j);
+    if(data.entries[k]) days.push(data.entries[k]);
+  }
+  if(days.length===0){ alert('گزارشی در ۷ روز اخیر ثبت نشده.'); return; }
+  printNow('خروجی هفتگی', buildPeriodTable(days), false);
+}
+function exportMonthly(){
+  var jy = todayJ.jy, jm = todayJ.jm;
+  var days = allEntriesSorted(false).filter(function(e){ return e.jy===jy && e.jm===jm; });
+  days.sort(function(a,b){ return a.jd-b.jd; });
+  if(days.length===0){ alert('گزارشی برای این ماه ثبت نشده.'); return; }
+  var body = '<div class="sub">ماه: '+JMONTHS[jm-1]+' '+toPersianDigits(jy)+'</div>' + buildPeriodTable(days);
+  printNow('خروجی ماهانه', body, true);
+}
+
+/* ================================================================
+   TARGET MODULE
+   ================================================================ */
+var WEEK_LABELS = ['هفته اول','هفته دوم','هفته سوم','هفته چهارم'];
+
+function renderTargetCurrent(){
+  var mount = document.getElementById('ttab-current');
+  mount.innerHTML = '';
+
+  var tag = document.createElement('div');
+  tag.className = 'target-month-tag';
+  tag.textContent = 'تارگت ماه ' + JMONTHS[curTarget.jm-1] + ' ' + toPersianDigits(curTarget.jy);
+  mount.appendChild(tag);
+
+  var note = document.createElement('div');
+  note.className = 'target-locked-note';
+  note.textContent = 'این فرم در ابتدای هر ماه شمسی تکمیل می‌شود. بعد از پایان ماه، اطلاعات این فرم فقط قابل مرور خواهد بود.';
+  mount.appendChild(note);
+
+  var topCard = document.createElement('div');
+  topCard.className = 'tcard';
+  topCard.innerHTML =
+    '<h4>مشخصات کلی <span>ماهانه</span></h4>'+
+    '<div class="tgrid2">'+
+      '<div class="tfield"><label>تعداد زیر مجموعه</label><input type="number" min="0" id="tf_subCount"></div>'+
+      '<div class="tfield"><label>تارگت سمت ماهانه</label><input type="text" id="tf_positionTarget"></div>'+
+    '</div>';
+  mount.appendChild(topCard);
+
+  var goalsCard = document.createElement('div');
+  goalsCard.className = 'tcard';
+  goalsCard.innerHTML =
+    '<h4>اهداف <span>ماهانه</span></h4>'+
+    '<div class="tgrid2">'+
+      '<div class="tfield"><label>تارگت فروش شخصی ماهانه</label><input type="number" min="0" id="tf_personalSalesTarget"></div>'+
+      '<div class="tfield"><label>تارگت فروش تیمی ماهانه</label><input type="number" min="0" id="tf_teamSalesTarget"></div>'+
+      '<div class="tfield"><label>تعداد ورودی شخصی ماهانه</label><input type="number" min="0" id="tf_personalEntryTarget"></div>'+
+      '<div class="tfield"><label>تعداد ورودی تیمی ماهانه</label><input type="number" min="0" id="tf_teamEntryTarget"></div>'+
+    '</div>';
+  mount.appendChild(goalsCard);
+
+  ['subCount','positionTarget','personalSalesTarget','teamSalesTarget','personalEntryTarget','teamEntryTarget'].forEach(function(f){
+    var el = topCard.querySelector('#tf_'+f) || goalsCard.querySelector('#tf_'+f);
+    el.value = curTarget[f] || '';
+    el.addEventListener('input', function(){ curTarget[f] = el.value; saveTargets(targetData); });
+  });
+
+  WEEK_LABELS.forEach(function(label, idx){
+    var wk = curTarget.weeks[idx];
+    var card = document.createElement('div');
+    card.className = 'tcard';
+    card.innerHTML =
+      '<h4>'+label+' <span>(تاریخ: ---)</span></h4>'+
+      '<div class="tfield" style="margin-bottom:10px;"><label>بازه تاریخ این هفته</label><input type="text" placeholder="مثال: ۱ تا ۷ تیر" data-f="date"></div>'+
+      '<div class="tgrid2" style="margin-bottom:10px;">'+
+        '<div class="tfield"><label>فروش شخصی هفتگی</label><input type="number" min="0" data-f="personalSales"></div>'+
+        '<div class="tfield"><label>فروش تیمی هفتگی</label><input type="number" min="0" data-f="teamSales"></div>'+
+        '<div class="tfield"><label>تعداد ورودی شخصی هفتگی</label><input type="number" min="0" data-f="personalEntry"></div>'+
+        '<div class="tfield"><label>تعداد ورودی تیمی هفتگی</label><input type="number" min="0" data-f="teamEntry"></div>'+
+      '</div>'+
+      '<div class="tfield"><label>برنامه رشد فردی (هفتگی)</label><textarea rows="2" data-f="growthPlan"></textarea></div>';
+    card.querySelectorAll('[data-f]').forEach(function(el){
+      var f = el.getAttribute('data-f');
+      el.value = wk[f] || '';
+      el.addEventListener('input', function(){ wk[f] = el.value; saveTargets(targetData); });
+    });
+    mount.appendChild(card);
+  });
+
+  var saveBar = document.createElement('div');
+  saveBar.className = 'save-bar';
+  saveBar.innerHTML = '<span class="save-dot"></span><span class="save-status-el">ذخیره خودکار فعال است</span>';
+  mount.appendChild(saveBar);
+
+  var exportBtn = document.createElement('button');
+  exportBtn.className = 'btn-outline';
+  exportBtn.style.marginTop = '6px';
+  exportBtn.textContent = 'دریافت خروجی PDF تارگت این ماه';
+  exportBtn.addEventListener('click', function(){ exportTargetPDF(curTarget); });
+  mount.appendChild(exportBtn);
+}
+
+function allTargetsSorted(excludeCurrent){
+  var keys = Object.keys(targetData.targets);
+  var list = keys.map(function(k){ return targetData.targets[k]; });
+  if(excludeCurrent) list = list.filter(function(t){ return tKey(t.jy,t.jm) !== curTKey; });
+  list.sort(function(a,b){ if(a.jy!==b.jy) return b.jy-a.jy; return b.jm-a.jm; });
+  return list;
+}
+function renderTargetHistoryList(){
+  var wrap = document.getElementById('targetHistoryList');
+  var past = allTargetsSorted(true);
+  if(past.length===0){
+    wrap.innerHTML = '<div class="empty">هنوز تارگت ماه قبلی ثبت نشده.</div>';
+    return;
+  }
+  wrap.innerHTML = '';
+  past.forEach(function(t){
+    var item = document.createElement('div');
+    item.className = 'hist-item';
+    item.innerHTML = '<div class="l"><div class="d">'+JMONTHS[t.jm-1]+' '+toPersianDigits(t.jy)+'</div><div class="m">تارگت سمت: '+(t.positionTarget||'—')+'</div></div><div class="r">مرور</div>';
+    item.addEventListener('click', function(){ showTargetDetail(t); });
+    wrap.appendChild(item);
+  });
+}
+function showTargetDetail(t){
+  document.getElementById('targetHistoryList').style.display='none';
+  var det = document.getElementById('targetHistoryDetail');
+  det.style.display='block';
+  var html = '<div class="back-link" id="backToTList">‹ بازگشت به لیست</div>';
+  html += '<div class="detail-box"><h3>تارگت '+JMONTHS[t.jm-1]+' '+toPersianDigits(t.jy)+'</h3>';
+  html += '<div class="detail-col"><div class="dc-name">تعداد زیر مجموعه</div><div>'+(t.subCount||'—')+'</div></div>';
+  html += '<div class="detail-col"><div class="dc-name">تارگت سمت ماهانه</div><div>'+(t.positionTarget||'—')+'</div></div>';
+  html += '<div class="detail-col"><div class="dc-name">اهداف ماهانه</div><div>فروش شخصی: '+toPersianDigits(t.personalSalesTarget||'۰')+' · فروش تیمی: '+toPersianDigits(t.teamSalesTarget||'۰')+' · ورودی شخصی: '+toPersianDigits(t.personalEntryTarget||'۰')+' · ورودی تیمی: '+toPersianDigits(t.teamEntryTarget||'۰')+'</div></div>';
+  t.weeks.forEach(function(wk, idx){
+    html += '<div class="detail-col"><div class="dc-name">'+WEEK_LABELS[idx]+' ('+(wk.date||'—')+')</div>';
+    html += '<div>فروش شخصی: '+toPersianDigits(wk.personalSales||'۰')+' · فروش تیمی: '+toPersianDigits(wk.teamSales||'۰')+'</div>';
+    html += '<div>ورودی شخصی: '+toPersianDigits(wk.personalEntry||'۰')+' · ورودی تیمی: '+toPersianDigits(wk.teamEntry||'۰')+'</div>';
+    html += '<div>برنامه رشد فردی: '+(wk.growthPlan||'—')+'</div></div>';
+  });
+  html += '</div>';
+  det.innerHTML = html;
+  document.getElementById('backToTList').addEventListener('click', function(){
+    det.style.display='none'; document.getElementById('targetHistoryList').style.display='block';
+  });
+}
+
+function exportTargetPDF(t){
+  var html = '<div class="sub">تعداد زیر مجموعه: '+(t.subCount?toPersianDigits(t.subCount):'—')+'</div>';
+  html += '<table>';
+  html += '<tr><th>ماه</th><th>تارگت فروش شخصی ماهانه</th><th>تارگت فروش تیمی ماهانه</th><th>تعداد ورودی شخصی ماهانه</th><th>تعداد ورودی تیمی ماهانه</th><th>برنامه رشد فردی (هفتگی)</th><th>تارگت سمت ماهانه</th></tr>';
+  html += '<tr><td>'+JMONTHS[t.jm-1]+' '+toPersianDigits(t.jy)+'</td><td>'+(t.personalSalesTarget?toPersianDigits(t.personalSalesTarget):'—')+'</td><td>'+(t.teamSalesTarget?toPersianDigits(t.teamSalesTarget):'—')+'</td><td>'+(t.personalEntryTarget?toPersianDigits(t.personalEntryTarget):'—')+'</td><td>'+(t.teamEntryTarget?toPersianDigits(t.teamEntryTarget):'—')+'</td><td>—</td><td rowspan="5">'+(t.positionTarget?escapeHtml(t.positionTarget):'—')+'</td></tr>';
+  t.weeks.forEach(function(wk, idx){
+    html += '<tr><td class="ltext">'+WEEK_LABELS[idx]+(wk.date?(' — '+escapeHtml(wk.date)):'')+'</td>'+
+      '<td>'+(wk.personalSales?toPersianDigits(wk.personalSales):'—')+'</td>'+
+      '<td>'+(wk.teamSales?toPersianDigits(wk.teamSales):'—')+'</td>'+
+      '<td>'+(wk.personalEntry?toPersianDigits(wk.personalEntry):'—')+'</td>'+
+      '<td>'+(wk.teamEntry?toPersianDigits(wk.teamEntry):'—')+'</td>'+
+      '<td class="ltext">'+(wk.growthPlan?escapeHtml(wk.growthPlan):'—')+'</td></tr>';
+  });
+  html += '</table>';
+  printNow('لیست تارگت ماهانه', html, false);
+}
+
+/* ---------------- name gate (runs last, after everything above is defined) ---------------- */
+var savedName = localStorage.getItem(NAME_KEY);
+function showMain(){
+  document.getElementById('nameGate').style.display = 'none';
+  document.getElementById('mainWrap').style.display = 'block';
+  document.getElementById('helloName').textContent = localStorage.getItem(NAME_KEY) || '';
+  init();
+}
+if(savedName){ showMain(); }
+else {
+  var ni = document.getElementById('nameInput');
+  var nb = document.getElementById('nameSubmit');
+  ni.addEventListener('input', function(){ nb.disabled = ni.value.trim().length === 0; });
+  nb.addEventListener('click', function(){
+    var v = ni.value.trim(); if(!v) return;
+    localStorage.setItem(NAME_KEY, v);
+    showMain();
+  });
+  ni.addEventListener('keydown', function(e){ if(e.key==='Enter' && ni.value.trim()) nb.click(); });
+}
+</script>
+</body>
+</html>
